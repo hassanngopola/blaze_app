@@ -1,0 +1,994 @@
+  [1m[35m (0.3ms)[0m  [1m[35mSET  @@SESSION.sql_mode = CONCAT(CONCAT(@@sql_mode, ',STRICT_ALL_TABLES'), ',NO_AUTO_VALUE_ON_ZERO'),  @@SESSION.sql_auto_is_null = 0, @@SESSION.wait_timeout = 2147483[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE DATABASE `hospital` DEFAULT CHARACTER SET `utf8mb4`[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSET  @@SESSION.sql_mode = CONCAT(CONCAT(@@sql_mode, ',STRICT_ALL_TABLES'), ',NO_AUTO_VALUE_ON_ZERO'),  @@SESSION.sql_auto_is_null = 0, @@SESSION.wait_timeout = 2147483[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE DATABASE `hospital_staff_management_test` DEFAULT CHARACTER SET `utf8mb4`[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSET  @@SESSION.sql_mode = CONCAT(CONCAT(@@sql_mode, ',STRICT_ALL_TABLES'), ',NO_AUTO_VALUE_ON_ZERO'),  @@SESSION.sql_auto_is_null = 0, @@SESSION.wait_timeout = 2147483[0m
+  [1m[35m (0.2ms)[0m  [1m[35mSET  @@SESSION.sql_mode = CONCAT(CONCAT(@@sql_mode, ',STRICT_ALL_TABLES'), ',NO_AUTO_VALUE_ON_ZERO'),  @@SESSION.sql_auto_is_null = 0, @@SESSION.wait_timeout = 2147483[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS `allocations` CASCADE[0m
+  [1m[35m (34.9ms)[0m  [1m[35mCREATE TABLE `allocations` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `allocation_date` date, `assigned_by` int, `voided` tinyint(1), `voided_reason` varchar(255), `voided_date` date, `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, `priority` int, `assigned_to` int, `patient_id` int, `status` int DEFAULT 0) ENGINE=InnoDB DEFAULT CHARSET=latin1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mDROP TABLE IF EXISTS `encounters` CASCADE[0m
+  [1m[35m (36.3ms)[0m  [1m[35mCREATE TABLE `encounters` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `encounter_type` varchar(255), `weight` int, `height` int, `temperature` int, `BP` int, `voided` tinyint(1), `voided_reason` varchar(255), `voided_date` date, `patient_id` bigint NOT NULL, `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, `user_id` int, `allocation_id` int,  INDEX `index_encounters_on_patient_id`  (`patient_id`)) ENGINE=InnoDB DEFAULT CHARSET=latin1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mDROP TABLE IF EXISTS `patients` CASCADE[0m
+  [1m[35m (27.3ms)[0m  [1m[35mCREATE TABLE `patients` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `first_name` varchar(255), `middle_name` varchar(255), `family_name` varchar(255), `date_of_birth` date, `email` text, `address` text, `phone_number` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, `voided` tinyint(1), `voided_reason` varchar(255), `voided_date` date, `gender` varchar(255)) ENGINE=InnoDB DEFAULT CHARSET=latin1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mDROP TABLE IF EXISTS `roles` CASCADE[0m
+  [1m[35m (26.7ms)[0m  [1m[35mCREATE TABLE `roles` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `description` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, `role_name` varchar(255)) ENGINE=InnoDB DEFAULT CHARSET=latin1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mDROP TABLE IF EXISTS `users` CASCADE[0m
+  [1m[35m (29.3ms)[0m  [1m[35mCREATE TABLE `users` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `username` varchar(255) NOT NULL, `password_digest` varchar(255) NOT NULL, `date_of_birth` date NOT NULL, `email` text NOT NULL, `voided` tinyint(1), `voided_reason` varchar(255), `voided_date` date, `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, `role_id` bigint, `status` varchar(255), `user_id_id` bigint, `first_name` varchar(255), `last_name` varchar(255),  INDEX `index_users_on_role_id`  (`role_id`)) ENGINE=InnoDB DEFAULT CHARSET=latin1[0m
+  [1m[35m (73.1ms)[0m  [1m[35mALTER TABLE `encounters` ADD CONSTRAINT `fk_rails_e544d3025e`
+FOREIGN KEY (`patient_id`)
+  REFERENCES `patients` (`id`)
+[0m
+  [1m[35m (72.7ms)[0m  [1m[35mALTER TABLE `users` ADD CONSTRAINT `fk_rails_642f17018b`
+FOREIGN KEY (`role_id`)
+  REFERENCES `roles` (`id`)
+[0m
+  [1m[35m (27.0ms)[0m  [1m[35mCREATE TABLE `schema_migrations` (`version` varchar(255) NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[35m (8.4ms)[0m  [1m[32mINSERT INTO `schema_migrations` (version) VALUES (20200302091612)[0m
+  [1m[35m (4.1ms)[0m  [1m[32mINSERT INTO `schema_migrations` (version) VALUES
+(20200224121210),
+(20200224122810),
+(20200224123149),
+(20200224123303),
+(20200224123434),
+(20200224123748),
+(20200224130231),
+(20200224133518),
+(20200226084543),
+(20200226084609),
+(20200226084623),
+(20200227064046),
+(20200227125311),
+(20200302080031),
+(20200302080209),
+(20200302085125),
+(20200302091246);
+
+[0m
+  [1m[35m (30.8ms)[0m  [1m[35mCREATE TABLE `ar_internal_metadata` (`key` varchar(255) NOT NULL PRIMARY KEY, `value` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.7ms)[0m  [1m[34mSELECT `ar_internal_metadata`.* FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' LIMIT 1[0m
+  [1m[35m (0.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.6ms)[0m  [1m[32mINSERT INTO `ar_internal_metadata` (`key`, `value`, `created_at`, `updated_at`) VALUES ('environment', 'development', '2021-02-12 07:23:12.321268', '2021-02-12 07:23:12.321268')[0m
+  [1m[35m (4.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.8ms)[0m  [1m[34mSELECT `ar_internal_metadata`.* FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' LIMIT 1[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.6ms)[0m  [1m[34mSELECT `ar_internal_metadata`.* FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'schema_sha1' LIMIT 1[0m
+  [1m[35m (0.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.5ms)[0m  [1m[32mINSERT INTO `ar_internal_metadata` (`key`, `value`, `created_at`, `updated_at`) VALUES ('schema_sha1', '7cd6096c3b335014f723f848ac166082323ff9dc', '2021-02-12 07:23:12.345222', '2021-02-12 07:23:12.345222')[0m
+  [1m[35m (4.0ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.6ms)[0m  [1m[35mSET  @@SESSION.sql_mode = CONCAT(CONCAT(@@sql_mode, ',STRICT_ALL_TABLES'), ',NO_AUTO_VALUE_ON_ZERO'),  @@SESSION.sql_auto_is_null = 0, @@SESSION.wait_timeout = 2147483[0m
+  [1m[35m (0.6ms)[0m  [1m[35mDROP TABLE IF EXISTS `allocations` CASCADE[0m
+  [1m[35m (27.6ms)[0m  [1m[35mCREATE TABLE `allocations` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `allocation_date` date, `assigned_by` int, `voided` tinyint(1), `voided_reason` varchar(255), `voided_date` date, `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, `priority` int, `assigned_to` int, `patient_id` int, `status` int DEFAULT 0) ENGINE=InnoDB DEFAULT CHARSET=latin1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mDROP TABLE IF EXISTS `encounters` CASCADE[0m
+  [1m[35m (31.4ms)[0m  [1m[35mCREATE TABLE `encounters` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `encounter_type` varchar(255), `weight` int, `height` int, `temperature` int, `BP` int, `voided` tinyint(1), `voided_reason` varchar(255), `voided_date` date, `patient_id` bigint NOT NULL, `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, `user_id` int, `allocation_id` int,  INDEX `index_encounters_on_patient_id`  (`patient_id`)) ENGINE=InnoDB DEFAULT CHARSET=latin1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mDROP TABLE IF EXISTS `patients` CASCADE[0m
+  [1m[35m (31.4ms)[0m  [1m[35mCREATE TABLE `patients` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `first_name` varchar(255), `middle_name` varchar(255), `family_name` varchar(255), `date_of_birth` date, `email` text, `address` text, `phone_number` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, `voided` tinyint(1), `voided_reason` varchar(255), `voided_date` date, `gender` varchar(255)) ENGINE=InnoDB DEFAULT CHARSET=latin1[0m
+  [1m[35m (0.5ms)[0m  [1m[35mDROP TABLE IF EXISTS `roles` CASCADE[0m
+  [1m[35m (25.1ms)[0m  [1m[35mCREATE TABLE `roles` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `description` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, `role_name` varchar(255)) ENGINE=InnoDB DEFAULT CHARSET=latin1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mDROP TABLE IF EXISTS `users` CASCADE[0m
+  [1m[35m (40.8ms)[0m  [1m[35mCREATE TABLE `users` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `username` varchar(255) NOT NULL, `password_digest` varchar(255) NOT NULL, `date_of_birth` date NOT NULL, `email` text NOT NULL, `voided` tinyint(1), `voided_reason` varchar(255), `voided_date` date, `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, `role_id` bigint, `status` varchar(255), `user_id_id` bigint, `first_name` varchar(255), `last_name` varchar(255),  INDEX `index_users_on_role_id`  (`role_id`)) ENGINE=InnoDB DEFAULT CHARSET=latin1[0m
+  [1m[35m (73.1ms)[0m  [1m[35mALTER TABLE `encounters` ADD CONSTRAINT `fk_rails_e544d3025e`
+FOREIGN KEY (`patient_id`)
+  REFERENCES `patients` (`id`)
+[0m
+  [1m[35m (74.3ms)[0m  [1m[35mALTER TABLE `users` ADD CONSTRAINT `fk_rails_642f17018b`
+FOREIGN KEY (`role_id`)
+  REFERENCES `roles` (`id`)
+[0m
+  [1m[35m (27.0ms)[0m  [1m[35mCREATE TABLE `schema_migrations` (`version` varchar(255) NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[35m (4.2ms)[0m  [1m[32mINSERT INTO `schema_migrations` (version) VALUES (20200302091612)[0m
+  [1m[35m (4.2ms)[0m  [1m[32mINSERT INTO `schema_migrations` (version) VALUES
+(20200224121210),
+(20200224122810),
+(20200224123149),
+(20200224123303),
+(20200224123434),
+(20200224123748),
+(20200224130231),
+(20200224133518),
+(20200226084543),
+(20200226084609),
+(20200226084623),
+(20200227064046),
+(20200227125311),
+(20200302080031),
+(20200302080209),
+(20200302085125),
+(20200302091246);
+
+[0m
+  [1m[35m (32.9ms)[0m  [1m[35mCREATE TABLE `ar_internal_metadata` (`key` varchar(255) NOT NULL PRIMARY KEY, `value` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (1.1ms)[0m  [1m[34mSELECT `ar_internal_metadata`.* FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' LIMIT 1[0m
+  [1m[35m (0.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.8ms)[0m  [1m[32mINSERT INTO `ar_internal_metadata` (`key`, `value`, `created_at`, `updated_at`) VALUES ('environment', 'development', '2021-02-12 07:23:12.799176', '2021-02-12 07:23:12.799176')[0m
+  [1m[35m (3.9ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.7ms)[0m  [1m[34mSELECT `ar_internal_metadata`.* FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' LIMIT 1[0m
+  [1m[35m (0.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Update (0.9ms)[0m  [1m[33mUPDATE `ar_internal_metadata` SET `ar_internal_metadata`.`value` = 'test', `ar_internal_metadata`.`updated_at` = '2021-02-12 07:23:12.818364' WHERE `ar_internal_metadata`.`key` = 'environment'[0m
+  [1m[35m (4.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.7ms)[0m  [1m[34mSELECT `ar_internal_metadata`.* FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'schema_sha1' LIMIT 1[0m
+  [1m[35m (0.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.6ms)[0m  [1m[32mINSERT INTO `ar_internal_metadata` (`key`, `value`, `created_at`, `updated_at`) VALUES ('schema_sha1', '7cd6096c3b335014f723f848ac166082323ff9dc', '2021-02-12 07:23:12.864565', '2021-02-12 07:23:12.864565')[0m
+  [1m[35m (3.8ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.5ms)[0m  [1m[35mSET  @@SESSION.sql_mode = CONCAT(CONCAT(@@sql_mode, ',STRICT_ALL_TABLES'), ',NO_AUTO_VALUE_ON_ZERO'),  @@SESSION.sql_auto_is_null = 0, @@SESSION.wait_timeout = 2147483[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[35m (0.5ms)[0m  [1m[35mSET  @@SESSION.sql_mode = CONCAT(CONCAT(@@sql_mode, ',STRICT_ALL_TABLES'), ',NO_AUTO_VALUE_ON_ZERO'),  @@SESSION.sql_auto_is_null = 0, @@SESSION.wait_timeout = 2147483[0m
+  [1m[35m (0.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.6ms)[0m  [1m[35mset foreign_key_checks=0
+[0m
+  [1m[36mRole Create (0.6ms)[0m  [1m[32mINSERT INTO `roles` (`description`, `created_at`, `updated_at`, `role_name`) VALUES ('superuser', '2021-02-12 07:23:12.929822', '2021-02-12 07:23:12.929822', 'admin')[0m
+DEPRECATION WARNING: Uniqueness validator will no longer enforce case sensitive comparison in Rails 6.1. To continue case sensitive comparison on the :username attribute in User model, pass `case_sensitive: true` option explicitly to the uniqueness validator. (called from block in <main> at /home/cranberry/Desktop/create/hospital_staff_management/db/seeds.rb:6)
+  [1m[36mUser Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM `users` WHERE `users`.`username` = BINARY 'admin' LIMIT 1[0m
+  [1m[36mUser Create (0.3ms)[0m  [1m[32mINSERT INTO `users` (`username`, `password_digest`, `date_of_birth`, `email`, `created_at`, `updated_at`, `role_id`, `first_name`, `last_name`) VALUES ('admin', '$2a$12$afKjZ/heaxyx7SjA1rVP/eWZGdjs8ZhgbHC7nEdbPOwHEMHYP9.ni', '2019-02-26', 'admin@mail.com', '2021-02-12 07:23:13.314339', '2021-02-12 07:23:13.314339', 1, 'Super', 'User')[0m
+  [1m[35m (12.0ms)[0m  [1m[35mCOMMIT[0m
+Started GET "/cable" for ::1 at 2021-02-12 09:24:04 +0200
+  [1m[35m (0.3ms)[0m  [1m[35mSET  @@SESSION.sql_mode = CONCAT(CONCAT(@@sql_mode, ',STRICT_ALL_TABLES'), ',NO_AUTO_VALUE_ON_ZERO'),  @@SESSION.sql_auto_is_null = 0, @@SESSION.wait_timeout = 2147483[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+Started GET "/cable/" [WebSocket] for ::1 at 2021-02-12 09:24:04 +0200
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started GET "/cable" for ::1 at 2021-02-12 09:24:05 +0200
+Started GET "/cable/" [WebSocket] for ::1 at 2021-02-12 09:24:05 +0200
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started GET "/cable" for ::1 at 2021-02-12 09:24:05 +0200
+Started GET "/cable/" [WebSocket] for ::1 at 2021-02-12 09:24:05 +0200
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Subscription class not found: "UserChannel"
+Started GET "/cable" for ::1 at 2021-02-12 09:24:06 +0200
+Started GET "/cable/" [WebSocket] for ::1 at 2021-02-12 09:24:06 +0200
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started GET "/cable" for ::1 at 2021-02-12 09:24:07 +0200
+Started GET "/cable/" [WebSocket] for ::1 at 2021-02-12 09:24:07 +0200
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Subscription class not found: "UserChannel"
+Started GET "/cable" for ::1 at 2021-02-12 09:24:09 +0200
+Started GET "/cable/" [WebSocket] for ::1 at 2021-02-12 09:24:09 +0200
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started POST "/authenticate" for 127.0.0.1 at 2021-02-12 11:05:00 +0200
+Started POST "/authenticate" for 127.0.0.1 at 2021-02-12 11:05:00 +0200
+  [1m[35m (0.7ms)[0m  [1m[35mSET  @@SESSION.sql_mode = CONCAT(CONCAT(@@sql_mode, ',STRICT_ALL_TABLES'), ',NO_AUTO_VALUE_ON_ZERO'),  @@SESSION.sql_auto_is_null = 0, @@SESSION.wait_timeout = 2147483[0m
+  [1m[35m (1.3ms)[0m  [1m[35mSET  @@SESSION.sql_mode = CONCAT(CONCAT(@@sql_mode, ',STRICT_ALL_TABLES'), ',NO_AUTO_VALUE_ON_ZERO'),  @@SESSION.sql_auto_is_null = 0, @@SESSION.wait_timeout = 2147483[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[35m (1.1ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+Processing by AuthenticationController#authenticate as HTML
+  Parameters: {"username"=>"admin", "password"=>"[FILTERED]", "authentication"=>{"username"=>"admin", "password"=>"[FILTERED]"}}
+Processing by AuthenticationController#authenticate as HTML
+  Parameters: {"username"=>"admin", "password"=>"[FILTERED]", "authentication"=>{"username"=>"admin", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (1.0ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`username` = 'admin' LIMIT 1[0m
+  ↳ app/commands/authenticate_user.rb:18:in `user'
+  [1m[36mUser Load (2.0ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`username` = 'admin' LIMIT 1[0m
+  ↳ app/commands/authenticate_user.rb:18:in `user'
+  [1m[36mCACHE User Load (0.1ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`username` = 'admin' LIMIT 1[0m
+  [1m[36mCACHE User Load (0.1ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`username` = 'admin' LIMIT 1[0m
+  ↳ app/commands/authenticate_user.rb:18:in `user'
+  ↳ app/commands/authenticate_user.rb:18:in `user'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`username` = 'admin' LIMIT 1[0m
+  ↳ app/models/user.rb:13:in `get_user_by_username'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`username` = 'admin' LIMIT 1[0m
+Completed 200 OK in 1765ms (Views: 1.4ms | ActiveRecord: 7.0ms | Allocations: 16544)
+
+
+  ↳ app/models/user.rb:13:in `get_user_by_username'
+Completed 200 OK in 1771ms (Views: 1.5ms | ActiveRecord: 440.9ms | Allocations: 17615)
+
+
+Started POST "/authenticate" for 127.0.0.1 at 2021-02-12 11:05:09 +0200
+Processing by AuthenticationController#authenticate as HTML
+  Parameters: {"username"=>"admin", "password"=>"[FILTERED]", "authentication"=>{"username"=>"admin", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`username` = 'admin' LIMIT 1[0m
+  ↳ app/commands/authenticate_user.rb:18:in `user'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`username` = 'admin' LIMIT 1[0m
+  ↳ app/commands/authenticate_user.rb:18:in `user'
+  [1m[36mCACHE User Load (0.1ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`username` = 'admin' LIMIT 1[0m
+  ↳ app/models/user.rb:13:in `get_user_by_username'
+Completed 200 OK in 659ms (Views: 1.2ms | ActiveRecord: 0.4ms | Allocations: 2514)
+
+
+Started POST "/api/v1/reports/patient_allocation" for 127.0.0.1 at 2021-02-12 11:05:10 +0200
+Processing by Api::V1::ReportsController#staff_patient_allocation_count as HTML
+  Parameters: {"report"=>{}}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (4.4ms)[0m  [1m[34mSELECT u.username, u.date_of_birth, u.email, u.role_id,
+                             r.role_name, count(a.id) as count
+                             FROM users u
+                             INNER JOIN roles r ON r.id = u.role_id
+                             INNER JOIN allocations a ON  a.assigned_to = u.id GROUP BY u.username[0m
+  ↳ app/controllers/api/v1/reports_controller.rb:20:in `staff_patient_allocation_count'
+Completed 200 OK in 14ms (Views: 0.3ms | ActiveRecord: 4.9ms | Allocations: 2257)
+
+
+Started GET "/api/v1/patients" for 127.0.0.1 at 2021-02-12 11:05:17 +0200
+Processing by Api::V1::PatientsController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mPatient Load (0.9ms)[0m  [1m[34mSELECT `patients`.* FROM `patients` WHERE `patients`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 19ms (Views: 4.3ms | ActiveRecord: 2.9ms | Allocations: 3934)
+
+
+Started GET "/api/v1/users" for 127.0.0.1 at 2021-02-12 11:05:21 +0200
+Processing by Api::V1::UsersController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT users.*, roles.role_name FROM `users` inner join roles 
+                                        on roles.id = users.role_id WHERE `users`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 6ms (Views: 3.9ms | ActiveRecord: 0.7ms | Allocations: 3519)
+
+
+Started GET "/api/v1/allocations" for 127.0.0.1 at 2021-02-12 11:05:23 +0200
+Processing by Api::V1::AllocationsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mAllocation Load (0.7ms)[0m  [1m[34mSELECT patients.*, allocations.*, roles.*,
+              concat(users.first_name, ' ', users.last_name) as user_assigned_to
+              FROM allocations
+              INNER JOIN patients on patients.id = allocations.patient_id 
+              INNER JOIN users ON allocations.assigned_to = users.id
+              INNER JOIN roles ON roles.id = users.role_id[0m
+  ↳ app/models/allocation.rb:26:in `get_allocations'
+Completed 200 OK in 12ms (Views: 0.7ms | ActiveRecord: 2.6ms | Allocations: 2584)
+
+
+Started GET "/api/v1/encounters" for 127.0.0.1 at 2021-02-12 11:05:26 +0200
+Processing by Api::V1::EncountersController#index as HTML
+  [1m[36mUser Load (1.7ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mEncounter Load (0.3ms)[0m  [1m[34mSELECT `encounters`.* FROM `encounters` WHERE `encounters`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 28ms (Views: 4.9ms | ActiveRecord: 3.0ms | Allocations: 4100)
+
+
+Started POST "/api/v1/reports/patient_allocation" for 127.0.0.1 at 2021-02-12 11:05:43 +0200
+Processing by Api::V1::ReportsController#staff_patient_allocation_count as HTML
+  Parameters: {"report"=>{}}
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT u.username, u.date_of_birth, u.email, u.role_id,
+                             r.role_name, count(a.id) as count
+                             FROM users u
+                             INNER JOIN roles r ON r.id = u.role_id
+                             INNER JOIN allocations a ON  a.assigned_to = u.id GROUP BY u.username[0m
+  ↳ app/controllers/api/v1/reports_controller.rb:20:in `staff_patient_allocation_count'
+Completed 200 OK in 9ms (Views: 0.2ms | ActiveRecord: 1.2ms | Allocations: 1483)
+
+
+Started GET "/api/v1/patients" for 127.0.0.1 at 2021-02-12 11:05:54 +0200
+Processing by Api::V1::PatientsController#index as HTML
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mPatient Load (0.4ms)[0m  [1m[34mSELECT `patients`.* FROM `patients` WHERE `patients`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 12ms (Views: 4.4ms | ActiveRecord: 0.9ms | Allocations: 1812)
+
+
+Started GET "/api/v1/users" for 127.0.0.1 at 2021-02-12 11:05:56 +0200
+Processing by Api::V1::UsersController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT users.*, roles.role_name FROM `users` inner join roles 
+                                        on roles.id = users.role_id WHERE `users`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 8ms (Views: 4.2ms | ActiveRecord: 0.9ms | Allocations: 2105)
+
+
+Started GET "/api/v1/patients" for 127.0.0.1 at 2021-02-12 11:05:57 +0200
+Processing by Api::V1::PatientsController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mPatient Load (0.5ms)[0m  [1m[34mSELECT `patients`.* FROM `patients` WHERE `patients`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 16ms (Views: 6.7ms | ActiveRecord: 1.0ms | Allocations: 1812)
+
+
+Started GET "/api/v1/users" for 127.0.0.1 at 2021-02-12 11:06:10 +0200
+Processing by Api::V1::UsersController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT users.*, roles.role_name FROM `users` inner join roles 
+                                        on roles.id = users.role_id WHERE `users`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 13ms (Views: 4.6ms | ActiveRecord: 1.1ms | Allocations: 2105)
+
+
+Started GET "/api/v1/allocations" for 127.0.0.1 at 2021-02-12 11:06:13 +0200
+Processing by Api::V1::AllocationsController#index as HTML
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mAllocation Load (1.1ms)[0m  [1m[34mSELECT patients.*, allocations.*, roles.*,
+              concat(users.first_name, ' ', users.last_name) as user_assigned_to
+              FROM allocations
+              INNER JOIN patients on patients.id = allocations.patient_id 
+              INNER JOIN users ON allocations.assigned_to = users.id
+              INNER JOIN roles ON roles.id = users.role_id[0m
+  ↳ app/models/allocation.rb:26:in `get_allocations'
+Completed 200 OK in 7ms (Views: 0.3ms | ActiveRecord: 1.9ms | Allocations: 1529)
+
+
+Started GET "/api/v1/encounters" for 127.0.0.1 at 2021-02-12 11:06:15 +0200
+Processing by Api::V1::EncountersController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mEncounter Load (0.2ms)[0m  [1m[34mSELECT `encounters`.* FROM `encounters` WHERE `encounters`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 4ms (Views: 1.1ms | ActiveRecord: 0.6ms | Allocations: 1824)
+
+
+Started GET "/api/v1/allocations" for 127.0.0.1 at 2021-02-12 11:06:30 +0200
+Processing by Api::V1::AllocationsController#index as HTML
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mAllocation Load (1.1ms)[0m  [1m[34mSELECT patients.*, allocations.*, roles.*,
+              concat(users.first_name, ' ', users.last_name) as user_assigned_to
+              FROM allocations
+              INNER JOIN patients on patients.id = allocations.patient_id 
+              INNER JOIN users ON allocations.assigned_to = users.id
+              INNER JOIN roles ON roles.id = users.role_id[0m
+  ↳ app/models/allocation.rb:26:in `get_allocations'
+Completed 200 OK in 8ms (Views: 0.4ms | ActiveRecord: 1.9ms | Allocations: 1514)
+
+
+Started GET "/api/v1/patients" for 127.0.0.1 at 2021-02-12 11:08:49 +0200
+Processing by Api::V1::PatientsController#index as HTML
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mPatient Load (0.4ms)[0m  [1m[34mSELECT `patients`.* FROM `patients` WHERE `patients`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 6ms (Views: 1.5ms | ActiveRecord: 1.0ms | Allocations: 1811)
+
+
+Started GET "/api/v1/patients" for 127.0.0.1 at 2021-02-12 11:09:31 +0200
+Processing by Api::V1::PatientsController#index as HTML
+  [1m[36mUser Load (1.2ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mPatient Load (0.5ms)[0m  [1m[34mSELECT `patients`.* FROM `patients` WHERE `patients`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 10ms (Views: 2.4ms | ActiveRecord: 1.7ms | Allocations: 1811)
+
+
+Started POST "/api/v1/reports/patient_allocation" for 127.0.0.1 at 2021-02-12 11:11:41 +0200
+Processing by Api::V1::ReportsController#staff_patient_allocation_count as HTML
+  Parameters: {"report"=>{}}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (1.6ms)[0m  [1m[34mSELECT u.username, u.date_of_birth, u.email, u.role_id,
+                             r.role_name, count(a.id) as count
+                             FROM users u
+                             INNER JOIN roles r ON r.id = u.role_id
+                             INNER JOIN allocations a ON  a.assigned_to = u.id GROUP BY u.username[0m
+  ↳ app/controllers/api/v1/reports_controller.rb:20:in `staff_patient_allocation_count'
+Completed 200 OK in 8ms (Views: 0.4ms | ActiveRecord: 2.0ms | Allocations: 1483)
+
+
+Started GET "/api/v1/patients" for 127.0.0.1 at 2021-02-12 11:11:47 +0200
+Processing by Api::V1::PatientsController#index as HTML
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mPatient Load (1.0ms)[0m  [1m[34mSELECT `patients`.* FROM `patients` WHERE `patients`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 11ms (Views: 3.5ms | ActiveRecord: 1.8ms | Allocations: 1811)
+
+
+Started POST "/api/v1/reports/patient_allocation" for 127.0.0.1 at 2021-02-12 11:12:14 +0200
+Processing by Api::V1::ReportsController#staff_patient_allocation_count as HTML
+  Parameters: {"report"=>{}}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (1.7ms)[0m  [1m[34mSELECT u.username, u.date_of_birth, u.email, u.role_id,
+                             r.role_name, count(a.id) as count
+                             FROM users u
+                             INNER JOIN roles r ON r.id = u.role_id
+                             INNER JOIN allocations a ON  a.assigned_to = u.id GROUP BY u.username[0m
+  ↳ app/controllers/api/v1/reports_controller.rb:20:in `staff_patient_allocation_count'
+Completed 200 OK in 7ms (Views: 0.4ms | ActiveRecord: 2.2ms | Allocations: 1483)
+
+
+Started GET "/api/v1/allocations" for 127.0.0.1 at 2021-02-12 11:12:33 +0200
+Processing by Api::V1::AllocationsController#index as HTML
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mAllocation Load (0.6ms)[0m  [1m[34mSELECT patients.*, allocations.*, roles.*,
+              concat(users.first_name, ' ', users.last_name) as user_assigned_to
+              FROM allocations
+              INNER JOIN patients on patients.id = allocations.patient_id 
+              INNER JOIN users ON allocations.assigned_to = users.id
+              INNER JOIN roles ON roles.id = users.role_id[0m
+  ↳ app/models/allocation.rb:26:in `get_allocations'
+Completed 200 OK in 5ms (Views: 0.2ms | ActiveRecord: 1.2ms | Allocations: 1514)
+
+
+Started GET "/api/v1/allocations" for 127.0.0.1 at 2021-02-12 11:13:03 +0200
+Processing by Api::V1::AllocationsController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mAllocation Load (0.7ms)[0m  [1m[34mSELECT patients.*, allocations.*, roles.*,
+              concat(users.first_name, ' ', users.last_name) as user_assigned_to
+              FROM allocations
+              INNER JOIN patients on patients.id = allocations.patient_id 
+              INNER JOIN users ON allocations.assigned_to = users.id
+              INNER JOIN roles ON roles.id = users.role_id[0m
+  ↳ app/models/allocation.rb:26:in `get_allocations'
+Completed 200 OK in 5ms (Views: 0.1ms | ActiveRecord: 1.2ms | Allocations: 1514)
+
+
+Started GET "/api/v1/encounters" for 127.0.0.1 at 2021-02-12 11:13:06 +0200
+Processing by Api::V1::EncountersController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mEncounter Load (0.3ms)[0m  [1m[34mSELECT `encounters`.* FROM `encounters` WHERE `encounters`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 6ms (Views: 1.3ms | ActiveRecord: 0.8ms | Allocations: 1817)
+
+
+Started GET "/api/v1/encounters" for 127.0.0.1 at 2021-02-12 11:14:52 +0200
+Processing by Api::V1::EncountersController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mEncounter Load (1.0ms)[0m  [1m[34mSELECT `encounters`.* FROM `encounters` WHERE `encounters`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 11ms (Views: 3.1ms | ActiveRecord: 1.4ms | Allocations: 1818)
+
+
+Started GET "/api/v1/allocations" for 127.0.0.1 at 2021-02-12 11:15:03 +0200
+Processing by Api::V1::AllocationsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mAllocation Load (1.5ms)[0m  [1m[34mSELECT patients.*, allocations.*, roles.*,
+              concat(users.first_name, ' ', users.last_name) as user_assigned_to
+              FROM allocations
+              INNER JOIN patients on patients.id = allocations.patient_id 
+              INNER JOIN users ON allocations.assigned_to = users.id
+              INNER JOIN roles ON roles.id = users.role_id[0m
+  ↳ app/models/allocation.rb:26:in `get_allocations'
+Completed 200 OK in 7ms (Views: 0.3ms | ActiveRecord: 1.9ms | Allocations: 1514)
+
+
+Started GET "/api/v1/encounters" for 127.0.0.1 at 2021-02-12 11:15:05 +0200
+Processing by Api::V1::EncountersController#index as HTML
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mEncounter Load (0.9ms)[0m  [1m[34mSELECT `encounters`.* FROM `encounters` WHERE `encounters`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 11ms (Views: 4.0ms | ActiveRecord: 1.6ms | Allocations: 1817)
+
+
+Started POST "/api/v1/reports/patient_allocation" for 127.0.0.1 at 2021-02-12 11:15:24 +0200
+Processing by Api::V1::ReportsController#staff_patient_allocation_count as HTML
+  Parameters: {"report"=>{}}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (1.9ms)[0m  [1m[34mSELECT u.username, u.date_of_birth, u.email, u.role_id,
+                             r.role_name, count(a.id) as count
+                             FROM users u
+                             INNER JOIN roles r ON r.id = u.role_id
+                             INNER JOIN allocations a ON  a.assigned_to = u.id GROUP BY u.username[0m
+  ↳ app/controllers/api/v1/reports_controller.rb:20:in `staff_patient_allocation_count'
+Completed 200 OK in 9ms (Views: 0.4ms | ActiveRecord: 2.4ms | Allocations: 1483)
+
+
+Started GET "/api/v1/patients" for 127.0.0.1 at 2021-02-12 11:16:00 +0200
+Processing by Api::V1::PatientsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mPatient Load (0.4ms)[0m  [1m[34mSELECT `patients`.* FROM `patients` WHERE `patients`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 5ms (Views: 1.6ms | ActiveRecord: 0.8ms | Allocations: 1812)
+
+
+Started GET "/api/v1/users" for 127.0.0.1 at 2021-02-12 11:16:02 +0200
+Processing by Api::V1::UsersController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (0.9ms)[0m  [1m[34mSELECT users.*, roles.role_name FROM `users` inner join roles 
+                                        on roles.id = users.role_id WHERE `users`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 7ms (Views: 3.2ms | ActiveRecord: 1.3ms | Allocations: 2107)
+
+
+Started POST "/api/v1/reports/patient_allocation" for 127.0.0.1 at 2021-02-12 11:16:07 +0200
+Processing by Api::V1::ReportsController#staff_patient_allocation_count as HTML
+  Parameters: {"report"=>{}}
+  [1m[36mUser Load (1.0ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (1.4ms)[0m  [1m[34mSELECT u.username, u.date_of_birth, u.email, u.role_id,
+                             r.role_name, count(a.id) as count
+                             FROM users u
+                             INNER JOIN roles r ON r.id = u.role_id
+                             INNER JOIN allocations a ON  a.assigned_to = u.id GROUP BY u.username[0m
+  ↳ app/controllers/api/v1/reports_controller.rb:20:in `staff_patient_allocation_count'
+Completed 200 OK in 11ms (Views: 0.8ms | ActiveRecord: 2.4ms | Allocations: 1483)
+
+
+Started POST "/api/v1/reports/patient_allocation" for 127.0.0.1 at 2021-02-12 11:16:21 +0200
+Started POST "/api/v1/reports/patient_allocation" for 127.0.0.1 at 2021-02-12 11:16:21 +0200
+Processing by Api::V1::ReportsController#staff_patient_allocation_count as HTML
+  Parameters: {"from"=>"2021-02-12", "to"=>"", "report"=>{"from"=>"2021-02-12", "to"=>""}}
+Started POST "/api/v1/reports/patient_allocation" for 127.0.0.1 at 2021-02-12 11:16:21 +0200
+Started POST "/api/v1/reports/patient_allocation" for 127.0.0.1 at 2021-02-12 11:16:21 +0200
+  [1m[36mUser Load (1.1ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[35m (0.6ms)[0m  [1m[35mSET  @@SESSION.sql_mode = CONCAT(CONCAT(@@sql_mode, ',STRICT_ALL_TABLES'), ',NO_AUTO_VALUE_ON_ZERO'),  @@SESSION.sql_auto_is_null = 0, @@SESSION.wait_timeout = 2147483[0m
+  [1m[35m (3.4ms)[0m  [1m[35mSET  @@SESSION.sql_mode = CONCAT(CONCAT(@@sql_mode, ',STRICT_ALL_TABLES'), ',NO_AUTO_VALUE_ON_ZERO'),  @@SESSION.sql_auto_is_null = 0, @@SESSION.wait_timeout = 2147483[0m
+Processing by Api::V1::ReportsController#staff_patient_allocation_count as HTML
+  [1m[35m (7.1ms)[0m  [1m[35mSET  @@SESSION.sql_mode = CONCAT(CONCAT(@@sql_mode, ',STRICT_ALL_TABLES'), ',NO_AUTO_VALUE_ON_ZERO'),  @@SESSION.sql_auto_is_null = 0, @@SESSION.wait_timeout = 2147483[0m
+  Parameters: {"from"=>"2021-02-12", "to"=>"2021-02-18", "report"=>{"from"=>"2021-02-12", "to"=>"2021-02-18"}}
+Processing by Api::V1::ReportsController#staff_patient_allocation_count as HTML
+Processing by Api::V1::ReportsController#staff_patient_allocation_count as HTML
+  Parameters: {"from"=>"2021-02-12", "to"=>"2021-02-18", "report"=>{"from"=>"2021-02-12", "to"=>"2021-02-18"}}
+  [1m[36mUser Load (4.7ms)[0m  [1m[34mSELECT u.username, u.date_of_birth, u.email, u.role_id,
+                             r.role_name, count(a.id) as count
+                             FROM users u
+                             INNER JOIN roles r ON r.id = u.role_id
+                             INNER JOIN allocations a ON  a.assigned_to = u.id WHERE date(a.created_at) BETWEEN '2021-02-12' and '' GROUP BY u.username[0m
+  ↳ app/controllers/api/v1/reports_controller.rb:20:in `staff_patient_allocation_count'
+  Parameters: {"from"=>"2021-02-12", "to"=>"", "report"=>{"from"=>"2021-02-12", "to"=>""}}
+Completed 200 OK in 36ms (Views: 0.2ms | ActiveRecord: 5.7ms | Allocations: 8393)
+
+
+  [1m[36mUser Load (4.8ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (3.5ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (2.9ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (5.5ms)[0m  [1m[34mSELECT u.username, u.date_of_birth, u.email, u.role_id,
+                             r.role_name, count(a.id) as count
+                             FROM users u
+                             INNER JOIN roles r ON r.id = u.role_id
+                             INNER JOIN allocations a ON  a.assigned_to = u.id WHERE date(a.created_at) BETWEEN '2021-02-12' and '2021-02-18' GROUP BY u.username[0m
+  ↳ app/controllers/api/v1/reports_controller.rb:20:in `staff_patient_allocation_count'
+Completed 200 OK in 22ms (Views: 0.3ms | ActiveRecord: 10.3ms | Allocations: 5339)
+
+
+  [1m[36mUser Load (2.3ms)[0m  [1m[34mSELECT u.username, u.date_of_birth, u.email, u.role_id,
+                             r.role_name, count(a.id) as count
+                             FROM users u
+                             INNER JOIN roles r ON r.id = u.role_id
+                             INNER JOIN allocations a ON  a.assigned_to = u.id WHERE date(a.created_at) BETWEEN '2021-02-12' and '' GROUP BY u.username[0m
+  [1m[36mUser Load (2.3ms)[0m  [1m[34mSELECT u.username, u.date_of_birth, u.email, u.role_id,
+                             r.role_name, count(a.id) as count
+                             FROM users u
+                             INNER JOIN roles r ON r.id = u.role_id
+                             INNER JOIN allocations a ON  a.assigned_to = u.id WHERE date(a.created_at) BETWEEN '2021-02-12' and '2021-02-18' GROUP BY u.username[0m
+  ↳ app/controllers/api/v1/reports_controller.rb:20:in `staff_patient_allocation_count'
+  ↳ app/controllers/api/v1/reports_controller.rb:20:in `staff_patient_allocation_count'
+Completed 200 OK in 21ms (Views: 0.3ms | ActiveRecord: 5.2ms | Allocations: 4137)
+
+
+Completed 200 OK in 26ms (Views: 0.5ms | ActiveRecord: 5.8ms | Allocations: 4606)
+
+
+Started GET "/api/v1/patients" for 127.0.0.1 at 2021-02-12 11:16:26 +0200
+Processing by Api::V1::PatientsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mPatient Load (1.3ms)[0m  [1m[34mSELECT `patients`.* FROM `patients` WHERE `patients`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 9ms (Views: 4.1ms | ActiveRecord: 1.7ms | Allocations: 1811)
+
+
+Started POST "/api/v1/patients" for 127.0.0.1 at 2021-02-12 11:17:11 +0200
+Processing by Api::V1::PatientsController#create as HTML
+  Parameters: {"first_name"=>"Emmanuel", "family_name"=>"Baobab", "middle_name"=>"", "gender"=>"Male", "email"=>"king@gmail.com", "phone_number"=>"265998548882", "address"=>"falls area3", "patient"=>{"first_name"=>"Emmanuel", "middle_name"=>"", "family_name"=>"Baobab", "email"=>"king@gmail.com", "address"=>"falls area3", "phone_number"=>"265998548882", "gender"=>"Male"}}
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[35m (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/v1/patients_controller.rb:21:in `create'
+  [1m[36mPatient Create (0.5ms)[0m  [1m[32mINSERT INTO `patients` (`first_name`, `middle_name`, `family_name`, `email`, `address`, `phone_number`, `created_at`, `updated_at`, `gender`) VALUES ('Emmanuel', '', 'Baobab', 'king@gmail.com', 'falls area3', '265998548882', '2021-02-12 09:17:11.756979', '2021-02-12 09:17:11.756979', 'Male')[0m
+  ↳ app/controllers/api/v1/patients_controller.rb:21:in `create'
+  [1m[35m (3.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/v1/patients_controller.rb:21:in `create'
+Completed 200 OK in 53ms (Views: 0.8ms | ActiveRecord: 6.8ms | Allocations: 11759)
+
+
+Started GET "/api/v1/encounters" for 127.0.0.1 at 2021-02-12 11:17:19 +0200
+Processing by Api::V1::EncountersController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mEncounter Load (1.1ms)[0m  [1m[34mSELECT `encounters`.* FROM `encounters` WHERE `encounters`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 9ms (Views: 3.5ms | ActiveRecord: 1.5ms | Allocations: 1817)
+
+
+Started GET "/api/v1/allocations" for 127.0.0.1 at 2021-02-12 11:17:22 +0200
+Processing by Api::V1::AllocationsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mAllocation Load (0.5ms)[0m  [1m[34mSELECT patients.*, allocations.*, roles.*,
+              concat(users.first_name, ' ', users.last_name) as user_assigned_to
+              FROM allocations
+              INNER JOIN patients on patients.id = allocations.patient_id 
+              INNER JOIN users ON allocations.assigned_to = users.id
+              INNER JOIN roles ON roles.id = users.role_id[0m
+  ↳ app/models/allocation.rb:26:in `get_allocations'
+Completed 200 OK in 7ms (Views: 0.3ms | ActiveRecord: 0.9ms | Allocations: 1514)
+
+
+Started GET "/api/v1/patients" for 127.0.0.1 at 2021-02-12 11:17:25 +0200
+Started GET "/api/v1/users" for 127.0.0.1 at 2021-02-12 11:17:25 +0200
+Processing by Api::V1::PatientsController#index as HTML
+  [1m[36mUser Load (2.5ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+Processing by Api::V1::UsersController#index as HTML
+  [1m[36mPatient Load (1.9ms)[0m  [1m[34mSELECT `patients`.* FROM `patients` WHERE `patients`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+  [1m[36mUser Load (1.1ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+Completed 200 OK in 15ms (Views: 3.7ms | ActiveRecord: 4.4ms | Allocations: 3466)
+
+
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (0.9ms)[0m  [1m[34mSELECT users.*, roles.role_name FROM `users` inner join roles 
+                                        on roles.id = users.role_id WHERE `users`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 14ms (Views: 3.6ms | ActiveRecord: 2.1ms | Allocations: 3317)
+
+
+Started GET "/api/v1/patients" for 127.0.0.1 at 2021-02-12 11:17:25 +0200
+Processing by Api::V1::PatientsController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mPatient Load (1.5ms)[0m  [1m[34mSELECT `patients`.* FROM `patients` WHERE `patients`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 9ms (Views: 4.2ms | ActiveRecord: 2.0ms | Allocations: 2035)
+
+
+Started GET "/api/v1/users" for 127.0.0.1 at 2021-02-12 11:17:29 +0200
+Started GET "/api/v1/patients" for 127.0.0.1 at 2021-02-12 11:17:29 +0200
+Processing by Api::V1::UsersController#index as HTML
+Processing by Api::V1::PatientsController#index as HTML
+  [1m[36mUser Load (3.0ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (2.9ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (23.1ms)[0m  [1m[34mSELECT users.*, roles.role_name FROM `users` inner join roles 
+                                        on roles.id = users.role_id WHERE `users`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+  [1m[36mPatient Load (4.8ms)[0m  [1m[34mSELECT `patients`.* FROM `patients` WHERE `patients`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 40ms (Views: 8.0ms | ActiveRecord: 26.1ms | Allocations: 3188)
+
+
+Completed 200 OK in 44ms (Views: 8.5ms | ActiveRecord: 7.7ms | Allocations: 4015)
+
+
+Started GET "/api/v1/encounters" for 127.0.0.1 at 2021-02-12 11:17:45 +0200
+Processing by Api::V1::EncountersController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mEncounter Load (0.4ms)[0m  [1m[34mSELECT `encounters`.* FROM `encounters` WHERE `encounters`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 6ms (Views: 2.5ms | ActiveRecord: 0.7ms | Allocations: 1825)
+
+
+Started GET "/api/v1/allocations" for 127.0.0.1 at 2021-02-12 11:17:48 +0200
+Processing by Api::V1::AllocationsController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mAllocation Load (1.1ms)[0m  [1m[34mSELECT patients.*, allocations.*, roles.*,
+              concat(users.first_name, ' ', users.last_name) as user_assigned_to
+              FROM allocations
+              INNER JOIN patients on patients.id = allocations.patient_id 
+              INNER JOIN users ON allocations.assigned_to = users.id
+              INNER JOIN roles ON roles.id = users.role_id[0m
+  ↳ app/models/allocation.rb:26:in `get_allocations'
+Completed 200 OK in 9ms (Views: 0.7ms | ActiveRecord: 1.5ms | Allocations: 1519)
+
+
+Started GET "/api/v1/users" for 127.0.0.1 at 2021-02-12 11:17:52 +0200
+Started GET "/api/v1/patients" for 127.0.0.1 at 2021-02-12 11:17:52 +0200
+Processing by Api::V1::UsersController#index as HTML
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+Processing by Api::V1::PatientsController#index as HTML
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (1.2ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (3.1ms)[0m  [1m[34mSELECT users.*, roles.role_name FROM `users` inner join roles 
+                                        on roles.id = users.role_id WHERE `users`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 16ms (Views: 4.3ms | ActiveRecord: 3.7ms | Allocations: 4255)
+
+
+  [1m[36mPatient Load (10.7ms)[0m  [1m[34mSELECT `patients`.* FROM `patients` WHERE `patients`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 20ms (Views: 5.3ms | ActiveRecord: 11.9ms | Allocations: 3525)
+
+
+Started GET "/api/v1/patients" for 127.0.0.1 at 2021-02-12 11:17:53 +0200
+Processing by Api::V1::PatientsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mPatient Load (0.3ms)[0m  [1m[34mSELECT `patients`.* FROM `patients` WHERE `patients`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 5ms (Views: 1.5ms | ActiveRecord: 0.8ms | Allocations: 2035)
+
+
+Started GET "/api/v1/patients" for 127.0.0.1 at 2021-02-12 11:17:59 +0200
+Started GET "/api/v1/users" for 127.0.0.1 at 2021-02-12 11:17:59 +0200
+Processing by Api::V1::PatientsController#index as HTML
+Processing by Api::V1::UsersController#index as HTML
+  [1m[36mUser Load (4.3ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (1.7ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mPatient Load (0.8ms)[0m  [1m[34mSELECT `patients`.* FROM `patients` WHERE `patients`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 17ms (Views: 3.8ms | ActiveRecord: 5.1ms | Allocations: 4233)
+
+
+  [1m[36mUser Load (2.5ms)[0m  [1m[34mSELECT users.*, roles.role_name FROM `users` inner join roles 
+                                        on roles.id = users.role_id WHERE `users`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 17ms (Views: 6.0ms | ActiveRecord: 4.1ms | Allocations: 4036)
+
+
+Started POST "/api/v1/allocations" for 127.0.0.1 at 2021-02-12 11:18:09 +0200
+Processing by Api::V1::AllocationsController#create as HTML
+  Parameters: {"assigned_to"=>1, "priority"=>"Normal", "allocation_date"=>"2021-02-18", "patient_id"=>1, "allocation"=>{"allocation_date"=>"2021-02-18", "priority"=>"Normal", "assigned_to"=>1, "patient_id"=>1}}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mCACHE User Load (0.1ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/controllers/api/v1/allocations_controller.rb:65:in `get_assignees'
+  [1m[36mPatient Load (0.6ms)[0m  [1m[34mSELECT `patients`.* FROM `patients` WHERE `patients`.`voided` IS NULL AND `patients`.`id` = 1 LIMIT 1[0m
+  ↳ app/controllers/api/v1/allocations_controller.rb:61:in `get_patient'
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/v1/allocations_controller.rb:24:in `create'
+  [1m[36mAllocation Create (0.3ms)[0m  [1m[32mINSERT INTO `allocations` (`allocation_date`, `assigned_by`, `created_at`, `updated_at`, `priority`, `assigned_to`, `patient_id`) VALUES ('2021-02-18', 1, '2021-02-12 09:18:09.505194', '2021-02-12 09:18:09.505194', 0, 1, 1)[0m
+  ↳ app/controllers/api/v1/allocations_controller.rb:24:in `create'
+  [1m[35m (6.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/v1/allocations_controller.rb:24:in `create'
+Completed 200 OK in 61ms (Views: 0.5ms | ActiveRecord: 10.8ms | Allocations: 11661)
+
+
+Started GET "/api/v1/encounters" for 127.0.0.1 at 2021-02-12 11:18:19 +0200
+Processing by Api::V1::EncountersController#index as HTML
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mEncounter Load (0.4ms)[0m  [1m[34mSELECT `encounters`.* FROM `encounters` WHERE `encounters`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 6ms (Views: 1.8ms | ActiveRecord: 1.0ms | Allocations: 1817)
+
+
+Started GET "/api/v1/allocations" for 127.0.0.1 at 2021-02-12 11:18:23 +0200
+Processing by Api::V1::AllocationsController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mAllocation Load (0.6ms)[0m  [1m[34mSELECT patients.*, allocations.*, roles.*,
+              concat(users.first_name, ' ', users.last_name) as user_assigned_to
+              FROM allocations
+              INNER JOIN patients on patients.id = allocations.patient_id 
+              INNER JOIN users ON allocations.assigned_to = users.id
+              INNER JOIN roles ON roles.id = users.role_id[0m
+  ↳ app/models/allocation.rb:26:in `get_allocations'
+Completed 200 OK in 8ms (Views: 2.0ms | ActiveRecord: 1.1ms | Allocations: 2272)
+
+
+Started GET "/api/v1/users" for 127.0.0.1 at 2021-02-12 11:18:30 +0200
+Processing by Api::V1::UsersController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT users.*, roles.role_name FROM `users` inner join roles 
+                                        on roles.id = users.role_id WHERE `users`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 8ms (Views: 4.0ms | ActiveRecord: 1.1ms | Allocations: 2105)
+
+
+Started GET "/api/v1/encounters" for 127.0.0.1 at 2021-02-12 11:18:36 +0200
+Processing by Api::V1::EncountersController#index as HTML
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mEncounter Load (0.3ms)[0m  [1m[34mSELECT `encounters`.* FROM `encounters` WHERE `encounters`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 6ms (Views: 1.3ms | ActiveRecord: 1.2ms | Allocations: 1818)
+
+
+Started POST "/api/v1/reports/patient_allocation" for 127.0.0.1 at 2021-02-12 11:18:54 +0200
+Processing by Api::V1::ReportsController#staff_patient_allocation_count as HTML
+  Parameters: {"report"=>{}}
+  [1m[36mUser Load (1.6ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (1.2ms)[0m  [1m[34mSELECT u.username, u.date_of_birth, u.email, u.role_id,
+                             r.role_name, count(a.id) as count
+                             FROM users u
+                             INNER JOIN roles r ON r.id = u.role_id
+                             INNER JOIN allocations a ON  a.assigned_to = u.id GROUP BY u.username[0m
+  ↳ app/controllers/api/v1/reports_controller.rb:20:in `staff_patient_allocation_count'
+Completed 200 OK in 10ms (Views: 1.0ms | ActiveRecord: 2.8ms | Allocations: 1658)
+
+
+Started GET "/api/v1/users" for 127.0.0.1 at 2021-02-12 11:18:58 +0200
+Processing by Api::V1::UsersController#index as HTML
+  [1m[36mUser Load (2.5ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (1.8ms)[0m  [1m[34mSELECT users.*, roles.role_name FROM `users` inner join roles 
+                                        on roles.id = users.role_id WHERE `users`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 20ms (Views: 9.9ms | ActiveRecord: 4.3ms | Allocations: 2105)
+
+
+Started GET "/api/v1/roles" for 127.0.0.1 at 2021-02-12 11:19:00 +0200
+Processing by Api::V1::RolesController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mRole Load (1.5ms)[0m  [1m[34mSELECT `roles`.* FROM `roles`[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 30ms (Views: 17.8ms | ActiveRecord: 4.9ms | Allocations: 6089)
+
+
+Started POST "/api/v1/users" for 127.0.0.1 at 2021-02-12 11:20:09 +0200
+Processing by Api::V1::UsersController#create as HTML
+  Parameters: {"first_name"=>"Hassan", "last_name"=>"Hassan", "username"=>"tested", "password"=>"[FILTERED]", "date_of_birth"=>"2021-02-04", "email"=>"king@gmail.com", "role_id"=>1, "roles"=>[{"id"=>1, "description"=>"superuser", "created_at"=>"2021-02-12T07:23:12.929Z", "updated_at"=>"2021-02-12T07:23:12.929Z", "role_name"=>"admin"}], "user"=>{"username"=>"tested", "password"=>"[FILTERED]", "email"=>"king@gmail.com", "date_of_birth"=>"2021-02-04", "role_id"=>1}}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mRole Load (1.0ms)[0m  [1m[34mSELECT `roles`.* FROM `roles` WHERE `roles`.`id` = 1 LIMIT 1[0m
+  ↳ app/controllers/api/v1/users_controller.rb:54:in `find_role'
+DEPRECATION WARNING: Uniqueness validator will no longer enforce case sensitive comparison in Rails 6.1. To continue case sensitive comparison on the :username attribute in User model, pass `case_sensitive: true` option explicitly to the uniqueness validator. (called from create at /home/cranberry/Desktop/create/hospital_staff_management/app/controllers/api/v1/users_controller.rb:16)
+  [1m[35m (0.4ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/v1/users_controller.rb:16:in `create'
+  [1m[36mUser Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM `users` WHERE `users`.`username` = BINARY 'tested' LIMIT 1[0m
+  ↳ app/controllers/api/v1/users_controller.rb:16:in `create'
+  [1m[36mUser Create (0.5ms)[0m  [1m[32mINSERT INTO `users` (`username`, `password_digest`, `date_of_birth`, `email`, `created_at`, `updated_at`, `role_id`) VALUES ('tested', '$2a$12$mq6zUXueMS7dzKCfbQ/GPO1wO5sAqU8rWhGDQ4KjhPHAihXI51r8u', '2021-02-04', 'king@gmail.com', '2021-02-12 09:20:09.408696', '2021-02-12 09:20:09.408696', 1)[0m
+  ↳ app/controllers/api/v1/users_controller.rb:16:in `create'
+  [1m[35m (12.6ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/v1/users_controller.rb:16:in `create'
+Completed 200 OK in 397ms (Views: 1.2ms | ActiveRecord: 16.1ms | Allocations: 5494)
+
+
+Started GET "/api/v1/roles" for 127.0.0.1 at 2021-02-12 11:23:12 +0200
+Processing by Api::V1::RolesController#index as HTML
+  [1m[36mUser Load (0.9ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mRole Load (0.4ms)[0m  [1m[34mSELECT `roles`.* FROM `roles`[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 7ms (Views: 1.6ms | ActiveRecord: 1.2ms | Allocations: 1863)
+
+
+Started POST "/api/v1/reports/patient_allocation" for 127.0.0.1 at 2021-02-12 11:23:17 +0200
+Processing by Api::V1::ReportsController#staff_patient_allocation_count as HTML
+  Parameters: {"report"=>{}}
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (1.4ms)[0m  [1m[34mSELECT u.username, u.date_of_birth, u.email, u.role_id,
+                             r.role_name, count(a.id) as count
+                             FROM users u
+                             INNER JOIN roles r ON r.id = u.role_id
+                             INNER JOIN allocations a ON  a.assigned_to = u.id GROUP BY u.username[0m
+  ↳ app/controllers/api/v1/reports_controller.rb:20:in `staff_patient_allocation_count'
+Completed 200 OK in 8ms (Views: 0.6ms | ActiveRecord: 2.2ms | Allocations: 1626)
+
+
+Started GET "/api/v1/patients" for 127.0.0.1 at 2021-02-12 11:23:24 +0200
+Processing by Api::V1::PatientsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mPatient Load (0.4ms)[0m  [1m[34mSELECT `patients`.* FROM `patients` WHERE `patients`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 6ms (Views: 1.4ms | ActiveRecord: 0.8ms | Allocations: 2035)
+
+
+Started GET "/api/v1/users" for 127.0.0.1 at 2021-02-12 11:23:28 +0200
+Processing by Api::V1::UsersController#index as HTML
+  [1m[36mUser Load (1.3ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT users.*, roles.role_name FROM `users` inner join roles 
+                                        on roles.id = users.role_id WHERE `users`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 7ms (Views: 2.1ms | ActiveRecord: 1.9ms | Allocations: 2338)
+
+
+Started GET "/api/v1/encounters" for 127.0.0.1 at 2021-02-12 11:23:34 +0200
+Processing by Api::V1::EncountersController#index as HTML
+  [1m[36mUser Load (1.1ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mEncounter Load (1.3ms)[0m  [1m[34mSELECT `encounters`.* FROM `encounters` WHERE `encounters`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 9ms (Views: 2.2ms | ActiveRecord: 2.4ms | Allocations: 1817)
+
+
+Started GET "/api/v1/encounters" for 127.0.0.1 at 2021-02-12 11:26:19 +0200
+Processing by Api::V1::EncountersController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mEncounter Load (0.4ms)[0m  [1m[34mSELECT `encounters`.* FROM `encounters` WHERE `encounters`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 5ms (Views: 1.7ms | ActiveRecord: 0.8ms | Allocations: 1817)
+
+
+Started POST "/api/v1/reports/patient_allocation" for 127.0.0.1 at 2021-02-12 11:28:32 +0200
+Processing by Api::V1::ReportsController#staff_patient_allocation_count as HTML
+  Parameters: {"report"=>{}}
+  [1m[36mUser Load (1.6ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT u.username, u.date_of_birth, u.email, u.role_id,
+                             r.role_name, count(a.id) as count
+                             FROM users u
+                             INNER JOIN roles r ON r.id = u.role_id
+                             INNER JOIN allocations a ON  a.assigned_to = u.id GROUP BY u.username[0m
+  ↳ app/controllers/api/v1/reports_controller.rb:20:in `staff_patient_allocation_count'
+Completed 200 OK in 11ms (Views: 0.3ms | ActiveRecord: 2.3ms | Allocations: 1626)
+
+
+Started GET "/api/v1/patients" for 127.0.0.1 at 2021-02-12 11:28:50 +0200
+Processing by Api::V1::PatientsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mPatient Load (0.5ms)[0m  [1m[34mSELECT `patients`.* FROM `patients` WHERE `patients`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 7ms (Views: 2.1ms | ActiveRecord: 0.9ms | Allocations: 2035)
+
+
+Started GET "/api/v1/users" for 127.0.0.1 at 2021-02-12 11:28:59 +0200
+Started GET "/api/v1/patients" for 127.0.0.1 at 2021-02-12 11:28:59 +0200
+Processing by Api::V1::UsersController#index as HTML
+  [1m[35m (3.9ms)[0m  [1m[35mSET  @@SESSION.sql_mode = CONCAT(CONCAT(@@sql_mode, ',STRICT_ALL_TABLES'), ',NO_AUTO_VALUE_ON_ZERO'),  @@SESSION.sql_auto_is_null = 0, @@SESSION.wait_timeout = 2147483[0m
+  [1m[36mUser Load (2.1ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+Processing by Api::V1::PatientsController#index as HTML
+  [1m[36mUser Load (2.7ms)[0m  [1m[34mSELECT users.*, roles.role_name FROM `users` inner join roles 
+                                        on roles.id = users.role_id WHERE `users`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+  [1m[36mUser Load (2.6ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+Completed 200 OK in 37ms (Views: 4.7ms | ActiveRecord: 4.8ms | Allocations: 4633)
+
+
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mPatient Load (1.2ms)[0m  [1m[34mSELECT `patients`.* FROM `patients` WHERE `patients`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 12ms (Views: 3.4ms | ActiveRecord: 3.8ms | Allocations: 3494)
+
+
+Started POST "/api/v1/reports/patient_allocation" for 127.0.0.1 at 2021-02-12 11:29:07 +0200
+Processing by Api::V1::ReportsController#staff_patient_allocation_count as HTML
+  Parameters: {"report"=>{}}
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (1.5ms)[0m  [1m[34mSELECT u.username, u.date_of_birth, u.email, u.role_id,
+                             r.role_name, count(a.id) as count
+                             FROM users u
+                             INNER JOIN roles r ON r.id = u.role_id
+                             INNER JOIN allocations a ON  a.assigned_to = u.id GROUP BY u.username[0m
+  ↳ app/controllers/api/v1/reports_controller.rb:20:in `staff_patient_allocation_count'
+Completed 200 OK in 7ms (Views: 0.3ms | ActiveRecord: 2.2ms | Allocations: 1626)
+
+
+Started GET "/api/v1/patients" for 127.0.0.1 at 2021-02-12 11:34:50 +0200
+Processing by Api::V1::PatientsController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mPatient Load (0.4ms)[0m  [1m[34mSELECT `patients`.* FROM `patients` WHERE `patients`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 6ms (Views: 1.8ms | ActiveRecord: 0.9ms | Allocations: 2035)
+
+
+Started GET "/api/v1/users" for 127.0.0.1 at 2021-02-12 11:34:52 +0200
+Processing by Api::V1::UsersController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT users.*, roles.role_name FROM `users` inner join roles 
+                                        on roles.id = users.role_id WHERE `users`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 7ms (Views: 2.7ms | ActiveRecord: 0.9ms | Allocations: 2338)
+
+
+Started GET "/api/v1/patients" for 127.0.0.1 at 2021-02-12 11:35:13 +0200
+Processing by Api::V1::PatientsController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mPatient Load (1.0ms)[0m  [1m[34mSELECT `patients`.* FROM `patients` WHERE `patients`.`voided` IS NULL[0m
+  ↳ app/controllers/concerns/response.rb:4:in `json_response'
+Completed 200 OK in 10ms (Views: 3.3ms | ActiveRecord: 1.5ms | Allocations: 2035)
+
+
+Started POST "/api/v1/reports/patient_allocation" for 127.0.0.1 at 2021-02-12 11:35:15 +0200
+Processing by Api::V1::ReportsController#staff_patient_allocation_count as HTML
+  Parameters: {"report"=>{}}
+  [1m[36mUser Load (1.4ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE `users`.`voided` IS NULL AND `users`.`id` = 1 LIMIT 1[0m
+  ↳ app/commands/authorize_api_request.rb:17:in `user'
+  [1m[36mUser Load (1.4ms)[0m  [1m[34mSELECT u.username, u.date_of_birth, u.email, u.role_id,
+                             r.role_name, count(a.id) as count
+                             FROM users u
+                             INNER JOIN roles r ON r.id = u.role_id
+                             INNER JOIN allocations a ON  a.assigned_to = u.id GROUP BY u.username[0m
+  ↳ app/controllers/api/v1/reports_controller.rb:20:in `staff_patient_allocation_count'
+Completed 200 OK in 10ms (Views: 0.6ms | ActiveRecord: 2.8ms | Allocations: 1626)
+
+
